@@ -1,0 +1,105 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "virtualNetworks_NetworkHub_vNet_name": {
+            "defaultValue": "NetworkHub-vNet",
+            "type": "String"
+        },
+        "virtualNetworks_MehodgeVm_vNet_externalid": {
+            "defaultValue": "/subscriptions/c25742b0-e9d4-4bed-8247-0ec3c6bc5a42/resourceGroups/MehodgeVM-RG/providers/Microsoft.Network/virtualNetworks/MehodgeVm-vNet",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2020-11-01",
+            "name": "[parameters('virtualNetworks_NetworkHub_vNet_name')]",
+            "location": "northeurope",
+            "tags": {
+                "Cost Centre": "Infrastructure",
+                "Environment": "Production",
+                "Owner": "Michael.Neal@Arkphire.com",
+                "Monitoring": "On"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "100.100.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "GatewaySubnet",
+                        "properties": {
+                            "addressPrefix": "100.100.1.0/28",
+                            "delegations": [],
+                            "privateEndpointNetworkPolicies": "Enabled",
+                            "privateLinkServiceNetworkPolicies": "Enabled"
+                        }
+                    }
+                ],
+                "virtualNetworkPeerings": [
+                    {
+                        "name": "2-NetworkHub",
+                        "properties": {
+                            "peeringState": "Connected",
+                            "remoteVirtualNetwork": {
+                                "id": "[parameters('virtualNetworks_MehodgeVm_vNet_externalid')]"
+                            },
+                            "allowVirtualNetworkAccess": true,
+                            "allowForwardedTraffic": true,
+                            "allowGatewayTransit": true,
+                            "useRemoteGateways": false,
+                            "remoteAddressSpace": {
+                                "addressPrefixes": [
+                                    "200.100.0.0/24"
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "enableDdosProtection": false
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/subnets",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(parameters('virtualNetworks_NetworkHub_vNet_name'), '/GatewaySubnet')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_NetworkHub_vNet_name'))]"
+            ],
+            "properties": {
+                "addressPrefix": "100.100.1.0/28",
+                "delegations": [],
+                "privateEndpointNetworkPolicies": "Enabled",
+                "privateLinkServiceNetworkPolicies": "Enabled"
+            }
+        },
+        {
+            "type": "Microsoft.Network/virtualNetworks/virtualNetworkPeerings",
+            "apiVersion": "2020-11-01",
+            "name": "[concat(parameters('virtualNetworks_NetworkHub_vNet_name'), '/2-NetworkHub')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworks_NetworkHub_vNet_name'))]"
+            ],
+            "properties": {
+                "peeringState": "Connected",
+                "remoteVirtualNetwork": {
+                    "id": "[parameters('virtualNetworks_MehodgeVm_vNet_externalid')]"
+                },
+                "allowVirtualNetworkAccess": true,
+                "allowForwardedTraffic": true,
+                "allowGatewayTransit": true,
+                "useRemoteGateways": false,
+                "remoteAddressSpace": {
+                    "addressPrefixes": [
+                        "200.100.0.0/24"
+                    ]
+                }
+            }
+        }
+    ]
+}
