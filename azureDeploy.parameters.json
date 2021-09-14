@@ -3,22 +3,25 @@
     "contentVersion": "1.0.0.0",
     "parameters": {  
     "vnetName": {
-        "Value": "vNet"
+        "Value": "TestvNet"
     },
     "vnetAddressPrefix": {
-      "Value": "10.0.0.0/16"
+      "Value": "100.0.0.0/16"
     },
     "subnet1Prefix": {
-      "Value": "10.0.0.0/24"
+      "Value": "100.0.0.0/24"
     },
     "subnet1Name": {
-      "Value": "Subnet1"
+      "Value": "FrontEndSubnet"
     },
     "subnet2Prefix": {
-      "Value": "10.0.1.0/24"
+      "Value": "100.0.1.0/24"
     },
     "subnet2Name": {
-      "Value": "Subnet2"
+      "Value": "BackEndSubnet"
+    },
+    "frontEndNSGName": {
+      "Value": "FrontEndSubnet-NSG"
     }
   }
 }
