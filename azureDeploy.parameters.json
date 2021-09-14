@@ -19,9 +19,6 @@
     },
     "subnet2Name": {
       "Value": "Subnet2"
-    },
-    "location": {
-      "Value": "[resourceGroup().location]"
     }
   }
 }
