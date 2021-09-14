@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {  
+    "vnetName": {
+        "Value": "vNet"
+    },
+    "vnetAddressPrefix": {
+      "Value": "10.0.0.0/16"
+    },
+    "subnet1Prefix": {
+      "Value": "10.0.0.0/24"
+    },
+    "subnet1Name": {
+      "Value": "Subnet1"
+    },
+    "subnet2Prefix": {
+      "Value": "10.0.1.0/24"
+    },
+    "subnet2Name": {
+      "Value": "Subnet2"
+    },
+    "location": {
+      "Value": "[resourceGroup().location]"
+    }
+  }
+}
